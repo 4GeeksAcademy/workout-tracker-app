@@ -1,19 +1,32 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+const axios = require("axios");
+require("dotenv").config();
 
 exports.helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
+});
+
+exports.getDayWeather = onRequest(async (req, res) => {
+  const response = {
+    status: 200,
+    data: {},
+    msg: "Successfully gathered weather data!",
+  };
+
+  const { WEATHER_API_KEY } = process.env;
+
+  try {
+    const { data } = await axios(
+      `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=Miami&days=1&aqi=no&alerts=no`
+    );
+
+    response.data = data;
+  } catch (e) {
+    response.status = 500;
+    response.msg = e.message;
+  }
+
+  res.status(response.status).send(response);
 });
