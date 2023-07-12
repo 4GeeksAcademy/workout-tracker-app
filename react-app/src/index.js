@@ -22,11 +22,7 @@ const functions = getFunctions(app);
 connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
