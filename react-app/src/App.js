@@ -6,10 +6,10 @@ function App() {
   useEffect(() => {
     (async () => {
       const res = await fetch(
-        "http://127.0.0.1:5001/geeks-firebase-72e6d/us-central1/helloWorld"
+        `http://127.0.0.1:5001/geeks-firebase-72e6d/us-central1/getDayWeather`
       );
 
-      const data = await res.text();
+      const data = await res.json();
 
       console.log("The res: ", data);
     })();
