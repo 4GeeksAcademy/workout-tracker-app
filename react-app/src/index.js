@@ -8,13 +8,13 @@ import { initializeApp } from "firebase/app";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB1UJSTIdYzKDgayNSRWMlVc_6i6J04Krg",
-  authDomain: "geeks-firebase-72e6d.firebaseapp.com",
-  projectId: "geeks-firebase-72e6d",
-  storageBucket: "geeks-firebase-72e6d.appspot.com",
-  messagingSenderId: "161315790364",
-  appId: "1:161315790364:web:08d050f50f2f75a97149d9",
-  measurementId: "G-ZCNEK8BRJL",
+  apiKey: "AIzaSyDXNx8rlP0PQaqGtGFfvUtpQIlXJiuI2i4",
+  authDomain: "fitness-log-app-c3dd9.firebaseapp.com",
+  projectId: "fitness-log-app-c3dd9",
+  storageBucket: "fitness-log-app-c3dd9.appspot.com",
+  messagingSenderId: "537715516606",
+  appId: "1:537715516606:web:d7f6828793640497a1aaef",
+  measurementId: "G-9HHSZ9NPMV"
 };
 
 const app = initializeApp(firebaseConfig);
