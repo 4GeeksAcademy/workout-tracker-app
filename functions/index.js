@@ -1,34 +1,66 @@
+const { initializeApp } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const axios = require("axios");
 const cors = require("cors")({ origin: true });
 require("dotenv").config();
 
-exports.helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
-});
+const admin = initializeApp({ projectId: 'fitness-log-app-c3dd9' });
+const firestore = getFirestore(admin);
 
-exports.getDayWeather = onRequest(async (req, res) => {
+exports.signUpOrSigninUser = onRequest((req, res) => {
   cors(req, res, async () => {
+
+    const { email } = req.body;
+
+    console.log(email);
+    
     const response = {
-      status: 200,
+      msg: '',
       data: {},
-      msg: "Successfully gathered weather data!",
+      status: 200
     };
 
-    const { WEATHER_API_KEY } = process.env;
+    if (!email) {
 
-    try {
-      const { data } = await axios(
-        `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=Miami&days=1&aqi=no&alerts=no`
-      );
-
-      response.data = data;
-    } catch (e) {
+      response.msg = 'No email passed';
       response.status = 500;
-      response.msg = e.message;
     }
+
+    if (email) {
+      try {
+        const documentSnapshot = await firestore.collection("user").doc(email).get();
+  
+        const data = documentSnapshot.data();
+  
+        // if user signing up they don't exist in database yet
+        if (!data) {
+  
+          console.log('registering user...')
+          const user = {
+            email,
+            created_at: new Date().toISOString()
+          }
+  
+          await firestore.collection("user").doc(email).set(user);
+  
+          response.data = user;
+          response.msg = 'Successfully signed up user';
+        }
+        else {
+          response.data = data;
+          response.msg = 'Successfully signed in user'
+        }
+        
+      }
+      catch (e) {
+  
+        response.msg = "Error";
+        response.status = 500;
+      }
+    }
+
 
     res.status(response.status).send(response);
   });

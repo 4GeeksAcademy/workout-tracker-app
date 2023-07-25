@@ -1,0 +1,13 @@
+
+.authPage {
+    background-color: black;
+    display: flex;
+    margin: auto;
+    height: 100vh;
+}
+
+.authHead {
+    margin: 10px auto;
+    display: flex;
+}
+

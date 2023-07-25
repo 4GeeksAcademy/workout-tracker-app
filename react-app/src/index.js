@@ -1,11 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
 import { initializeApp } from "firebase/app";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import Layout from "./Layout";
+import { getAuth, GoogleAuthProvider, connectAuthEmulator } from "firebase/auth";
+
+
+const provider = new GoogleAuthProvider();
 
 const firebaseConfig = {
   apiKey: "AIzaSyDXNx8rlP0PQaqGtGFfvUtpQIlXJiuI2i4",
@@ -18,11 +22,15 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const functions = getFunctions(app);
-connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+// const functions = getFunctions(app);
+const auth = getAuth(app);
+connectAuthEmulator(auth,  "http://127.0.0.1:9099");
+const db = getFirestore(app);
+connectFirestoreEmulator(db, '127.0.0.1', 5057);
 
+export {auth, provider}
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(<Layout />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

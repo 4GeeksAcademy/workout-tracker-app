@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import logo from "./logo.svg";
+// where to import?
 import 'bootstrap/dist/css/bootstrap.css';
-import "./App.css";
+import "../styles/landingPage.css";
 import { Link } from 'react-router-dom';
 
-function App() {
+export default function LandingPage() {
   // useEffect(() => {
   //   (async () => {
   //     const res = await fetch(
@@ -45,13 +45,13 @@ function App() {
               <img src="https://placehold.co/200x150" alt="programPreview" />
             </div>
         </div>
-        <Link to="/addcontact">
-					<button className="btn btn-primary m-2">Add a contact</button>
-				</Link> 
+        <Link to="/auth">
+            <div className="d-grid gap-2 col-8 mx-auto mb-3">
+				      <button className="btn btn-primary">Lets Start!</button>
+            </div>
+		    </Link> 
       </div>
       
     </div>
   );
 }
-
-export default App;
