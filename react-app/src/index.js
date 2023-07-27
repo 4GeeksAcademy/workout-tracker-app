@@ -22,13 +22,15 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// const functions = getFunctions(app);
+const functions = getFunctions(app);
+connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 const auth = getAuth(app);
 connectAuthEmulator(auth,  "http://127.0.0.1:9099");
+// firebase.firestore()?
 const db = getFirestore(app);
 connectFirestoreEmulator(db, '127.0.0.1', 5057);
-
 export {auth, provider}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Layout />);
 

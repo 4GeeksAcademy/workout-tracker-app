@@ -1,16 +1,9 @@
 import React from "react";
 import '../styles/dashboard.css'
-import { useNavigate } from "react-router";
+
 
 export default function Dashboard () {
-    const navigate = useNavigate();
 
-    const logout =()=>{
-        localStorage.clear()
-        
-        navigate('/')
-
-    }
 
     return (
         <div className="App">
@@ -18,7 +11,6 @@ export default function Dashboard () {
             <header>
                 <h1>Powerlifting App</h1>
                 {/* Add navigation links here if you have multiple pages */}
-                <button onClick={logout}>Logout</button>
             </header>
 
             {/* Main Content */}

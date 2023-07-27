@@ -4,13 +4,15 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { provider, auth } from '../index.js';
-import Dashboard from './Dashboard';
-import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { Context } from '../context/Provider';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AuthPage() {
 
   const { setUser } = useContext(Context);
+  const navigate = useNavigate();
 
   const handleClick = ((e)=>{
         signInWithPopup(auth, provider)
@@ -23,7 +25,7 @@ export default function AuthPage() {
             console.log('token: ', token);
             console.log('user: ', user);
 
-            const res = await fetch(`${process.env.REACT_APP_FIREBASE_FUNCTIONS_HOST}/fitness-log-app-c3dd9/us-central1/signUpOrSigninUser`, {
+            const res = await fetch(`http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/signUpOrSigninUser`, {
               method: 'post',
               body: JSON.stringify({ email: user.email }),
               headers: {
@@ -33,6 +35,13 @@ export default function AuthPage() {
 
             const dbUser = await res.json();
 
+            if (user) {
+              navigate('/dashboard');
+              
+            }
+            
+            
+
             console.log('data: ', dbUser);
             // setUser(dbUser.data);
             // IdP data available using getAdditionalUserInfo(result)
@@ -40,12 +49,12 @@ export default function AuthPage() {
           }).catch((error) => {
             console.error(error);
             // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            // const errorCode = error.code;
+            // const errorMessage = error.message;
             // The email of the user's account used.
-            const email = error.customData.email;
+            // const email = error.customData.email;
             // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            // const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
           });
         // createUserWithEmailAndPassword(auth, "elvishernandeztheone@gmail.com", "password")
@@ -57,18 +66,19 @@ export default function AuthPage() {
   return (
     <div>
 
-     
       <div className="authPage">
-        <div className="authHead">
+        <div className="row authHead">
           <h1>Authenticate</h1>
+        </div> 
+        <div className="row">
+          <div className="d-grid gap-2 pt-3">
+            <button className="btn btn-outline-light p-3" onClick={handleClick}>
+              <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                Login with Google
+            </button>
+          </div>
         </div>
-        <Link to="/dashboard">
-              <div className="d-grid gap-2 col-4 mb-3">
-                <button onClick={handleClick} className="btn btn-primary">Sign in with google</button>
-              </div>
-        </Link> 
       </div>
-    
     </div>
   
     

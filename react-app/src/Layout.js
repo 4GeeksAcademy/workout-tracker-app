@@ -4,6 +4,8 @@ import LandingPage from "./views/LandingPage";
 import AuthPage from "./views/AuthPage";
 import Dashboard from "./views/Dashboard";
 import ContextProvider from "./context/Provider";
+import { Navbar } from "./components/Navbar";
+import Calendar from "./views/Calendar";
 
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -14,10 +16,12 @@ const Layout = () => {
 		<div>
 			<BrowserRouter basename={basename}>
 				<ContextProvider>
+					<Navbar />
 						<Routes>
 							<Route path="/" element={<LandingPage />} />
 							<Route path="/auth" element={<AuthPage />} />
 							<Route path="/dashboard" element={<Dashboard />} />
+							<Route path="/calendar" element={<Calendar />} />
 							{/* <Route path="/single/:theid" element={<Single />} /> */}
 							<Route path="*" element={<h1>Not found!</h1>} />
 						</Routes>

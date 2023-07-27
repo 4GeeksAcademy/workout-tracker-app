@@ -1,13 +1,22 @@
 
 .authPage {
-    background-color: black;
-    display: flex;
+    background: black;
+    align-items:  center;
+    justify-content: center;
     margin: auto;
     height: 100vh;
-}
-
-.authHead {
-    margin: 10px auto;
     display: flex;
+    flex-direction: column;
 }
 
+
+
+.authHead h1 {
+    color: rgb(255, 255, 255);
+    padding-bottom: 20px;
+}
+
+.signIn {
+    margin: auto;
+    padding: 10px;
+}
