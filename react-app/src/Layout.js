@@ -6,6 +6,10 @@ import Dashboard from "./views/Dashboard";
 import ContextProvider from "./context/Provider";
 import { Navbar } from "./components/Navbar";
 import Calendar from "./views/Calendar";
+import ProgramsList from "./views/ProgramsList";
+import ProgramPage from "./views/ProgramPage";
+import AddExerciseModal from "./components/AddExerciseModal";
+
 
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -22,6 +26,9 @@ const Layout = () => {
 							<Route path="/auth" element={<AuthPage />} />
 							<Route path="/dashboard" element={<Dashboard />} />
 							<Route path="/calendar" element={<Calendar />} />
+							<Route path="/programs" element={<ProgramsList />} />
+							<Route path="/programs/:programId" element={<ProgramPage />} />
+							<Route path="/programs/:programId/add-exercise" element={<AddExerciseModal />} />
 							{/* <Route path="/single/:theid" element={<Single />} /> */}
 							<Route path="*" element={<h1>Not found!</h1>} />
 						</Routes>
