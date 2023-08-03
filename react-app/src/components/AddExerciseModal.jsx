@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from '../index.js'
 
 export default function AddExerciseModal() {
-  const { programId } = useParams();
+  const { programName } = useParams();
   const navigate = useNavigate();
 
-  // State to hold the form data for the new exercise
   const [formData, setFormData] = useState({
+    exerciseName: '',
     sets: '',
     reps: '',
     rpe: '',
   });
 
-  // Function to handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -21,20 +22,38 @@ export default function AddExerciseModal() {
     }));
   };
 
-  // Function to handle saving the new exercise and navigate back to the program page
-  const handleSaveExercise = (e) => {
+
+  const handleSaveExercise = async (e) => {
     e.preventDefault();
-    // Your code to save the exercise data to the program
+
+    try {
+
+      const docRef = await addDoc(collection(db, "exercises"), {
+        exercise: formData,    
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
     console.log('Exercise data:', formData);
-    // Navigate back to the program page
-    navigate(`/programs/${programId}`);
+    navigate(`/programs/${programName}`);
   };
 
   return (
     <div>
       <h2>Add Exercise</h2>
       <form onSubmit={handleSaveExercise}>
-        {/* Your form with inputs for exercise details */}
+        <div>
+          <label>Exercise:</label>
+          <input
+            type="text"
+            name="exerciseName"
+            value={formData.exerciseName}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div>
           <label>Sets:</label>
           <input
@@ -45,7 +64,26 @@ export default function AddExerciseModal() {
             required
           />
         </div>
-        {/* Add other input fields for reps, RPE, etc. */}
+        <div>
+          <label>Reps:</label>
+          <input
+            type="number"
+            name="reps"
+            value={formData.reps}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>RPE:</label>
+          <input
+            type="number"
+            name="rpe"
+            value={formData.rpe}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <button type="submit">Save Exercise</button>
       </form>
     </div>

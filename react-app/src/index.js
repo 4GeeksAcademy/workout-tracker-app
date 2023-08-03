@@ -29,7 +29,7 @@ connectAuthEmulator(auth,  "http://127.0.0.1:9099");
 // firebase.firestore()?
 const db = getFirestore(app);
 connectFirestoreEmulator(db, '127.0.0.1', 5057);
-export {auth, provider}
+export {auth, provider, db}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Layout />);

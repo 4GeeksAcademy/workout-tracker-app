@@ -36,6 +36,11 @@ export default function AuthPage() {
             const dbUser = await res.json();
 
             if (user) {
+              <div>
+                <h2>Welcome!</h2>
+                <p>Loading...</p>
+              </div>
+                
               navigate('/dashboard');
               
             }

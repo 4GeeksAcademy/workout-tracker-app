@@ -27,8 +27,8 @@ const Layout = () => {
 							<Route path="/dashboard" element={<Dashboard />} />
 							<Route path="/calendar" element={<Calendar />} />
 							<Route path="/programs" element={<ProgramsList />} />
-							<Route path="/programs/:programId" element={<ProgramPage />} />
-							<Route path="/programs/:programId/add-exercise" element={<AddExerciseModal />} />
+							<Route path="/programs/:programName" element={<ProgramPage />} />
+							<Route path="/programs/:programName/add-exercise" element={<AddExerciseModal />} />
 							{/* <Route path="/single/:theid" element={<Single />} /> */}
 							<Route path="*" element={<h1>Not found!</h1>} />
 						</Routes>

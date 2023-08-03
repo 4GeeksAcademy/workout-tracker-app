@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function ProgramsList() {
   // Use useParams() to get the programId from the URL
   const [programs, setPrograms] = useState([]);
-
+  const [newProgramName, setNewProgramName] = useState('');
   const navigate = useNavigate();
 
   
@@ -19,8 +19,9 @@ export default function ProgramsList() {
         name: programName,
       };
       setPrograms([...programs, newProgram]);
-      
-      navigate(`/programs/${newProgram.id}`);
+      setNewProgramName(programName);
+      navigate(`/programs/${newProgram.name}`);
+      console.log('Updated programs:', programs);
     }
   };
 
@@ -28,9 +29,10 @@ export default function ProgramsList() {
     <div>
       <h2>Programs List</h2>
       <ul>
-        {programs.map((program) => (
+      {programs.map((program) => (
           <li key={program.id}>
-            <Link to={`/programs/${program.id}`}>{program.name}</Link>
+            <Link to={`/programs/${encodeURIComponent(program.name)}`}>{program.name}</Link>
+            {console.log(program.name)}
           </li>
         ))}
       </ul>
