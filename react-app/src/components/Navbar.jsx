@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, {  useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { auth } from "../index.js";
@@ -18,7 +18,7 @@ export const Navbar = () => {
     }
 	return (
         <>
-        
+        {user && Object.keys(user).length > 0 && (
 		<nav className="navbar navbar-light bg-dark">
 			<button className="btn btn-secondary ms-3" onClick={logout}>Logout</button>
 			<div className="ml-auto">
@@ -33,8 +33,8 @@ export const Navbar = () => {
 				</Link>
 
 			</div>
-		</nav>
-
+		</nav>)
+}
         {/* {!user && <p style={{color: "red"}}>succesfully logged out!</p>}
         {console.log(user)} */}
         </>

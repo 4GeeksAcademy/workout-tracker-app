@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,9 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 export default function ProgramsList() {
   // Use useParams() to get the programId from the URL
   const [programs, setPrograms] = useState([]);
-  const [newProgramName, setNewProgramName] = useState('');
   const navigate = useNavigate();
-
+  
+  useEffect(() => {
+    console.log('Updated programs:', programs);
+  }, [programs]);
   
   const handleCreateProgram = () => {
     const programName = prompt('Enter the name of the new program:');
@@ -19,9 +21,8 @@ export default function ProgramsList() {
         name: programName,
       };
       setPrograms([...programs, newProgram]);
-      setNewProgramName(programName);
       navigate(`/programs/${newProgram.name}`);
-      console.log('Updated programs:', programs);
+      
     }
   };
 

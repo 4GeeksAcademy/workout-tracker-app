@@ -1,20 +1,22 @@
 import React from 'react';
 import '../styles/authPage.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import {  useState } from 'react';
+// import { Link } from 'react-router-dom';
 import { provider, auth } from '../index.js';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { Context } from '../context/Provider';
+// import { Context } from '../context/Provider';
 import { useNavigate } from 'react-router-dom';
 
 
 export default function AuthPage() {
 
-  const { setUser } = useContext(Context);
+  // const { setUser } = useContext(Context);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = ((e)=>{
+        setIsLoading(true);
         signInWithPopup(auth, provider)
           .then(async (result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
@@ -36,10 +38,6 @@ export default function AuthPage() {
             const dbUser = await res.json();
 
             if (user) {
-              <div>
-                <h2>Welcome!</h2>
-                <p>Loading...</p>
-              </div>
                 
               navigate('/dashboard');
               
@@ -61,6 +59,11 @@ export default function AuthPage() {
             // The AuthCredential type that was used.
             // const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
+          })
+
+          .finally(() => {
+            
+            setIsLoading(false);
           });
         // createUserWithEmailAndPassword(auth, "elvishernandeztheone@gmail.com", "password")
         //   .then((res) => console.log(res))
@@ -72,6 +75,13 @@ export default function AuthPage() {
     <div>
 
       <div className="authPage">
+          {isLoading ? (
+        <div className="row items-center text-light">
+          <h2>Welcome!</h2>
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div>
         <div className="row authHead">
           <h1>Authenticate</h1>
         </div> 
@@ -81,8 +91,10 @@ export default function AuthPage() {
               <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                 Login with Google
             </button>
-          </div>
+          </div> 
         </div>
+        </div>
+          )}
       </div>
     </div>
   

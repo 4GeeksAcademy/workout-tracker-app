@@ -7,6 +7,7 @@ export const Context = createContext();
 export default function ContextProvider(props) {
 
     const [user, setUser] = useState({});
+    
 
     useEffect(() => {
 

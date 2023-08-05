@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, setDoc, doc } from "firebase/firestore";
 import { db } from '../index.js'
+import { Context } from "../context/Provider.jsx";
 
 export default function AddExerciseModal() {
   const { programName } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(Context);
 
   const [formData, setFormData] = useState({
     exerciseName: '',
@@ -27,11 +29,19 @@ export default function AddExerciseModal() {
     e.preventDefault();
 
     try {
+      
+      const exercisesCollectionRef = collection(
+        db,
+        'user',
+        user.email,
+        'programs',
+        programName,
+        'exercises'
+      );
 
-      const docRef = await addDoc(collection(db, "exercises"), {
-        exercise: formData,    
-      });
-      console.log("Document written with ID: ", docRef.id);
+      await setDoc(doc(exercisesCollectionRef, formData.exerciseName), formData);
+
+      console.log("Document written succesfully");
     } catch (e) {
       console.error("Error adding document: ", e);
     }
