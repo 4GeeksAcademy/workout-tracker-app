@@ -1,5 +1,6 @@
+import '../styles/programPage.css';
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { collection, getDocs } from "firebase/firestore";
 import {db} from '../index.js';
@@ -11,6 +12,7 @@ export default function ProgramPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(Context);
   const [programData, setProgramData] = useState([]);
+  const navigate = useNavigate()
 
 const fetchPost = async () => {
   console.log("Fetching data from Firestore...");
@@ -23,14 +25,6 @@ const fetchPost = async () => {
     ));
     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // const exerciseRef = db.collection(
-    //   db,
-    //   'user',
-    //   user.email,
-    //   'programs',
-    //   programName,
-    //   'exercises'
-    // );
     // const snapshot = await exerciseRef.where('exerciseName', '==', true).get();
 
     // snapshot.forEach(doc => {
@@ -60,24 +54,37 @@ useEffect(()=>{
 
 
   return (
-    <div>
-      <h2>Program: {programName}</h2>
+    <div className='container mt-5 bg-dark'>
+      <h2 className='text-light'>Program: {programName}</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (programData.length > 0) ? (
         programData.map((exercise) => (
-          <div key={exercise.id}>
+          <div className="exercise my-3" key={exercise.id}>
             <h3>Exercise: {exercise.exerciseName}</h3>
             <p>Sets: {exercise.sets}</p>
             <p>Reps: {exercise.reps}</p>
             <p>RPE: {exercise.rpe}</p>
+            <div className="exercise-actions">
+            <span className="edit-icon">
+              <i className="fas fa-edit"></i>
+            </span>
+            <span className="delete-icon mx-2">
+              <i className="fas fa-trash"></i>
+            </span>
+          </div>
           </div>
         ))
       ) : (
-        <p>No exercises found for this program.</p>
+        <p className='text-light'>No exercises found for this program.</p>
       )}
       
-      <Link to={`/programs/${programName}/add-exercise`}>Add Exercise</Link>
+      <button
+        className="btn btn-primary mt-3"
+        onClick={() => navigate(`/programs/${programName}/add-exercise`)}
+      >
+        Add Exercise
+      </button>
     </div>
   );
 

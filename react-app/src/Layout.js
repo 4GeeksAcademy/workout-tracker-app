@@ -9,6 +9,8 @@ import Calendar from "./views/Calendar";
 import ProgramsList from "./views/ProgramsList";
 import ProgramPage from "./views/ProgramPage";
 import AddExerciseModal from "./components/AddExerciseModal";
+import '@fortawesome/fontawesome-free/css/all.css';
+
 
 
 const Layout = () => {

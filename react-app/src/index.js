@@ -7,6 +7,8 @@ import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import Layout from "./Layout";
 import { getAuth, GoogleAuthProvider, connectAuthEmulator } from "firebase/auth";
+import '@fortawesome/fontawesome-free/css/all.css';
+
 
 
 const provider = new GoogleAuthProvider();

@@ -65,3 +65,48 @@ exports.signUpOrSigninUser = onRequest((req, res) => {
     res.status(response.status).send(response);
   });
 });
+
+
+exports.createProgram = onRequest(async (req, res) => {
+  try {
+    const { userEmail, programName } = req.body;
+
+    if (!userEmail || !programName) {
+      return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    const userProgramsRef = firestore.collection('user').doc(userEmail).collection('programs');
+
+    const existingProgram = await userProgramsRef.doc(programName).get();
+    if (existingProgram.exists) {
+      return res.status(409).json({ error: 'Program name already exists' });
+    }
+    
+    const programData = {
+      name: programName,
+      created_at: new Date().toISOString(),
+    };
+    await userProgramsRef.doc(programName).set(programData);
+
+    return res.status(201).json({ message: 'Program created successfully' });
+  } catch (error) {
+    console.error('Error creating program:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+exports.addExercise = onRequest(async (req, res) => {
+  try {
+    const { userEmail, programName, formData } = req.body;
+
+    const exercisesCollectionRef = firestore.collection('user').doc(userEmail).collection('programs').doc(programName).collection('exercises');
+
+    await exercisesCollectionRef.doc(formData.exerciseName).set(formData);
+
+    return res.status(201).json({ message: 'exercise added successfully' });
+  } catch (error) {
+    console.error('Error adding exercise:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});

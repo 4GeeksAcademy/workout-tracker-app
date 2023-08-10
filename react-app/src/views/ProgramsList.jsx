@@ -1,43 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import '../styles/programsList.css';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import CreateProgram from '../components/CreateProgram';
+import { Context } from '../context/Provider';
+import { collection, getDocs } from "firebase/firestore";
+import {db} from '../index.js';
+
 
 
 
 export default function ProgramsList() {
-  // Use useParams() to get the programId from the URL
   const [programs, setPrograms] = useState([]);
-  const navigate = useNavigate();
+  const { user } = useContext(Context);
+
   
-  useEffect(() => {
-    console.log('Updated programs:', programs);
-  }, [programs]);
+  const fetchPost = async () => {
+    console.log("Fetching programs from Firestore...");
   
-  const handleCreateProgram = () => {
-    const programName = prompt('Enter the name of the new program:');
-    if (programName) {
-      const newProgram = {
-        id: uuidv4(),
-        name: programName,
-      };
-      setPrograms([...programs, newProgram]);
-      navigate(`/programs/${newProgram.name}`);
-      
+    try {
+      const querySnapshot = await getDocs(collection(
+        db,
+        `user/${user.email}/programs`
+      ));
+      const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+  
+  
+      console.log("Data fetched successfully:", newData);
+      setPrograms(...programs, newData);
+
+  
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
+  
+  useEffect(()=>{
+
+      fetchPost();
+    
+  }, [user])
+
 
   return (
-    <div>
-      <h2>Programs List</h2>
-      <ul>
-      {programs.map((program) => (
-          <li key={program.id}>
+    <div className="container mt-4 bg-dark text-light">
+      <CreateProgram />
+
+      <h2 className="my-3">Programs List</h2>
+      <ul className="list-group">
+        {programs.map((program) => (
+          <li key={program.id} className="list-group-item">
             <Link to={`/programs/${encodeURIComponent(program.name)}`}>{program.name}</Link>
-            {console.log(program.name)}
           </li>
         ))}
       </ul>
-      <button onClick={handleCreateProgram}>Create Program</button>
+
     </div>
   );
 }

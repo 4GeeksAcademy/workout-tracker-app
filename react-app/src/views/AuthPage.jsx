@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/authPage.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {  useState } from 'react';
-// import { Link } from 'react-router-dom';
+// import { Link } from s'react-router-dom';
 import { provider, auth } from '../index.js';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 // import { Context } from '../context/Provider';

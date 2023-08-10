@@ -1,13 +1,37 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useReducer } from 'react';
 
 import { auth } from '../index.js'
 
 export const Context = createContext();
 
+const ADD_EXERCISE = 'ADD_EXERCISE';
+const EDIT_EXERCISE = 'EDIT_EXERCISE';
+const DELETE_EXERCISE = 'DELETE_EXERCISE';
+
+// check data strucutre
+const initialExercises = {};
+
+const exercisesReducer = (state, action) => {
+    switch (action.type) {
+        case ADD_EXERCISE:
+        return [...state, action.payload];
+
+        case EDIT_EXERCISE:
+        return state.map(exercise => exercise.id === action.payload.id ? action.payload : exercise);
+        
+        case DELETE_EXERCISE:
+        return state.filter(exercise => exercise.id !== action.payload);
+        
+        default:
+        return state;
+    }
+};
+
 export default function ContextProvider(props) {
 
     const [user, setUser] = useState({});
-    
+    const [exercises, dispatchExercises] = useReducer(exercisesReducer, initialExercises);
+
 
     useEffect(() => {
 
@@ -41,6 +65,8 @@ export default function ContextProvider(props) {
     }, []);
 
     return (
+
+        
         <Context.Provider value={{ user, setUser }}>
             {props.children}
         </Context.Provider>
