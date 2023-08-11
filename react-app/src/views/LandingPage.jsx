@@ -1,4 +1,3 @@
-// import { useEffect } from "react";
 // where to import?
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -20,7 +19,7 @@ export default function LandingPage() {
 
   return (
     <div className="App">
-      <div className="container landingPage h-100">
+      <div className="container landingPage h-100 text-light">
         <h1 className="header">Workout Log App</h1>
         <div className="row preview">
             <div className="col">

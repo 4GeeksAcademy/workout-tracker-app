@@ -10,7 +10,7 @@ export default function Dashboard () {
         <div className="App">
             
             <header>
-                <h1>Powerlifting App</h1>
+                <h1 className="text-light">Powerlifting App</h1>
             </header>
 
             

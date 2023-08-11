@@ -1,7 +1,6 @@
 import '../styles/programPage.css';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import { collection, getDocs } from "firebase/firestore";
 import {db} from '../index.js';
 import { Context } from "../context/Provider.jsx";
@@ -25,15 +24,7 @@ const fetchPost = async () => {
     ));
     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // const snapshot = await exerciseRef.where('exerciseName', '==', true).get();
 
-    // snapshot.forEach(doc => {
-
-    //   console.log(doc.id, '=>', doc.data());
-    // });
-
-
-    // console.log("Data fetched successfully:", newData);
     console.log(newData)
 
     if (newData) setProgramData(newData);
@@ -54,8 +45,8 @@ useEffect(()=>{
 
 
   return (
-    <div className='container mt-5 bg-dark'>
-      <h2 className='text-light'>Program: {programName}</h2>
+    <div className='container mt-5 bg-dark programPage'>
+      <h2 className='text-light mb-2'>Program: {programName}</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (programData.length > 0) ? (

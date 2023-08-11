@@ -44,13 +44,13 @@ export default function ProgramsList() {
 
 
   return (
-    <div className="container mt-4 bg-dark text-light">
+    <div className="container mt-4 bg-dark text-light programsList">
       <CreateProgram />
 
       <h2 className="my-3">Programs List</h2>
-      <ul className="list-group">
+      <ul className="list-group programs">
         {programs.map((program) => (
-          <li key={program.id} className="list-group-item">
+          <li key={program.id} className="list-group-item mb-2 programLink">
             <Link to={`/programs/${encodeURIComponent(program.name)}`}>{program.name}</Link>
           </li>
         ))}

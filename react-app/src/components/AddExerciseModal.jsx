@@ -14,6 +14,7 @@ export default function AddExerciseModal() {
     sets: '',
     reps: '',
     rpe: '',
+    // video: ''
   });
 
   const handleChange = (e) => {
@@ -56,32 +57,6 @@ export default function AddExerciseModal() {
     }
   };
 
-
-
-  // const handleSaveExercise = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-      
-  //     const exercisesCollectionRef = collection(
-  //       db,
-  //       'user',
-  //       user.email,
-  //       'programs',
-  //       programName,
-  //       'exercises'
-  //     );
-
-  //     await setDoc(doc(exercisesCollectionRef, formData.exerciseName), formData);
-
-  //     console.log("Document written succesfully");
-  //   } catch (e) {
-  //     console.error("Error adding document: ", e);
-  //   }
-
-  //   console.log('Exercise data:', formData);
-  //   navigate(`/programs/${programName}`);
-  // };
 
   return (
     <div className="container mt-4 bg-dark text-light">
@@ -129,6 +104,15 @@ export default function AddExerciseModal() {
             value={formData.rpe}
             onChange={handleChange}
             required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Video:</label>
+          <input
+            type="file"
+            name="video"
+            accept="video/*"
+            onChange={handleChange}
           />
         </div>
         <button type="submit" className="btn btn-primary">
