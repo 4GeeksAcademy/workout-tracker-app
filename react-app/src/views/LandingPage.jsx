@@ -5,17 +5,7 @@ import "../styles/landingPage.css";
 import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await fetch(
-  //       `http://127.0.0.1:0001/geeks-firebase-72e6d/us-central1/getDayWeather`
-  //     );
 
-  //     const data = await res.json();
-
-  //     console.log("The res: ", data);
-  //   })();
-  // }, []);
 
   return (
     <div className="App">

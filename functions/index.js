@@ -110,3 +110,18 @@ exports.addExercise = onRequest(async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+exports.deleteExercise = onRequest(async (req, res) => {
+  try {
+    const { userEmail, programName, exercise } = req.body;
+
+    const exercisesCollectionRef = firestore.collection('user').doc(userEmail).collection('programs').doc(programName).collection('exercises');
+
+    await exercisesCollectionRef.doc(exercise).delete();
+
+    return res.status(201).json({ message: 'exercise deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting exercise:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});

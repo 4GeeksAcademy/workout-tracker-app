@@ -4,33 +4,63 @@ import { auth } from '../index.js'
 
 export const Context = createContext();
 
-const ADD_EXERCISE = 'ADD_EXERCISE';
-const EDIT_EXERCISE = 'EDIT_EXERCISE';
-const DELETE_EXERCISE = 'DELETE_EXERCISE';
+export const actions = {
+    FETCH_EXERCISES(exercises) {
+        return { type: FETCH_EXERCISES, payload: exercises }
+    },
+
+    ADD_EXERCISE(exercises) {
+        return { type: ADD_EXERCISE, payload: exercises}
+    },
+
+    EDIT_EXERCISE(exercises) {
+        return { type: ADD_EXERCISE, payload: exercises}
+    },
+
+    DELETE_EXERCISE(exercises) {
+        return { type: ADD_EXERCISE, payload: exercises}
+    },
+}
+
+export const ADD_EXERCISE = 'ADD_EXERCISE';
+export const EDIT_EXERCISE = 'EDIT_EXERCISE';
+export const DELETE_EXERCISE = 'DELETE_EXERCISE';
+export const FETCH_EXERCISES = 'FETCH_EXERCISES';
 
 // check data strucutre
-const initialExercises = {};
+const initialExercises = {
+    exercises: []
+};
+// getdocs ->
 
-const exercisesReducer = (state, action) => {
+const exercisesReducer = (state = {}, action) => {
     switch (action.type) {
-        case ADD_EXERCISE:
-        return [...state, action.payload];
+        case FETCH_EXERCISES: {
+            return {
+                ...state,
+                exercises: action.payload
+            }
+        }
+        // case ADD_EXERCISE:
+        // return [...state, action.payload];
 
-        case EDIT_EXERCISE:
-        return state.map(exercise => exercise.id === action.payload.id ? action.payload : exercise);
+        // case EDIT_EXERCISE:
+        // return state.map(exercise => exercise.id === action.payload.id ? action.payload : exercise);
         
-        case DELETE_EXERCISE:
-        return state.filter(exercise => exercise.id !== action.payload);
+        // case DELETE_EXERCISE:
+        // return state.filter(exercise => exercise.id !== action.payload);
         
         default:
-        return state;
+            return state;
     }
 };
+
+
 
 export default function ContextProvider(props) {
 
     const [user, setUser] = useState({});
-    const [exercises, dispatchExercises] = useReducer(exercisesReducer, initialExercises);
+    const [state, dispatch] = useReducer(exercisesReducer, initialExercises);
 
 
     useEffect(() => {
@@ -67,7 +97,7 @@ export default function ContextProvider(props) {
     return (
 
         
-        <Context.Provider value={{ user, setUser }}>
+        <Context.Provider value={{ user, setUser, state, dispatch }}>
             {props.children}
         </Context.Provider>
     )

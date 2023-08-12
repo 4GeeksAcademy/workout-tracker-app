@@ -14,7 +14,7 @@ export default function AddExerciseModal() {
     sets: '',
     reps: '',
     rpe: '',
-    // video: ''
+    video: '',
   });
 
   const handleChange = (e) => {
