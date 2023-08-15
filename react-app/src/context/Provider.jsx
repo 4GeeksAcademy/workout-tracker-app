@@ -14,11 +14,11 @@ export const actions = {
     },
 
     EDIT_EXERCISE(exercises) {
-        return { type: ADD_EXERCISE, payload: exercises}
+        return { type: EDIT_EXERCISE, payload: exercises}
     },
 
     DELETE_EXERCISE(exercises) {
-        return { type: ADD_EXERCISE, payload: exercises}
+        return { type: DELETE_EXERCISE, payload: exercises}
     },
 }
 
@@ -27,11 +27,9 @@ export const EDIT_EXERCISE = 'EDIT_EXERCISE';
 export const DELETE_EXERCISE = 'DELETE_EXERCISE';
 export const FETCH_EXERCISES = 'FETCH_EXERCISES';
 
-// check data strucutre
 const initialExercises = {
     exercises: []
 };
-// getdocs ->
 
 const exercisesReducer = (state = {}, action) => {
     switch (action.type) {
@@ -41,14 +39,25 @@ const exercisesReducer = (state = {}, action) => {
                 exercises: action.payload
             }
         }
-        // case ADD_EXERCISE:
-        // return [...state, action.payload];
+        case ADD_EXERCISE:
+            return {
+                ...state,
+                exercises: action.payload
+            }
 
-        // case EDIT_EXERCISE:
-        // return state.map(exercise => exercise.id === action.payload.id ? action.payload : exercise);
+        case EDIT_EXERCISE:
+            return {
+                ...state,
+                exercises: action.payload
+                // return state.map(exercise => exercise.id === action.payload.id ? action.payload : exercise);
+            }
         
-        // case DELETE_EXERCISE:
+        case DELETE_EXERCISE:
         // return state.filter(exercise => exercise.id !== action.payload);
+        return {
+            ...state,
+            exercises: action.payload
+        }
         
         default:
             return state;
@@ -82,7 +91,7 @@ export default function ContextProvider(props) {
 
                 const data = await res.json();
 
-                console.log('data', data);
+                // console.log('user data: ', data.data);
 
                 setUser(data.data);
             }

@@ -22,9 +22,9 @@ export const Navbar = () => {
 		<nav className="navbar navbar-light bg-dark">
 			<button className="btn btn-secondary ms-3" onClick={logout}>Logout</button>
 			<div className="ml-auto">
-				<Link to="/calendar">
+				{/* <Link to="/calendar">
 					<button className="btn btn-primary m-2">Calendar</button>
-				</Link>
+				</Link> */}
                 <Link to="/dashboard">
 					<button className="btn btn-primary m-2">Dashboard</button>
 				</Link>

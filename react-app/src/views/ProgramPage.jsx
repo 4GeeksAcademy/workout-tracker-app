@@ -1,51 +1,43 @@
 import '../styles/programPage.css';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { collection, getDocs } from "firebase/firestore";
-import {db} from '../index.js';
 import { Context, actions } from "../context/Provider.jsx";
 import methods from '../services/Exercise'
+import EditExerciseModal from '../components/EditExerciseModal';
 
 export default function ProgramPage() {
   const { programName } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const { user, state, dispatch } = useContext(Context);
+  const { user, state, dispatch } = useContext(Context); 
+  const [show, setShow] = useState(false)
   const [programData, setProgramData] = useState([]);
   const navigate = useNavigate()
-
-// const _fetchPost = async () => {
-//   console.log("Fetching data from Firestore...");
-
-//   try {
-//     console.log(user.email, programName)
-//     const querySnapshot = await getDocs(collection(
-//       db,
-//       `user/${user.email}/programs/${programName}/exercises`
-//     ));
-//     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  const [exerciseId, setExerciseId] = useState(null)
 
 
-//     console.log(newData)
-
-//     if (newData) setProgramData(newData);
-//     setIsLoading(false);
-
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     setIsLoading(false); 
-//   }
-// };
-
+const handleOpen = (exerciseId) => {
+  setExerciseId(exerciseId)
+  setShow(true)
+}
+const handleClose = () => {
+  setShow(false)
+}
 const fetchPost = async () => {
 
-  console.log('Running fetchPost');
   try {
 
     const exercises = await methods.fetchExercises(user.email, programName);
     dispatch(actions.FETCH_EXERCISES(exercises));
+    setProgramData(exercises);
+    setIsLoading(false);
+    console.log('state', state);
+    // console.log('exercises', exercises);
+
+    
   }
   catch (e) {
     console.error(e);
+    setIsLoading(false);
   }
 
 }
@@ -53,38 +45,23 @@ const fetchPost = async () => {
 useEffect(()=>{
   if (!programData.length) {
     fetchPost();
+
   }
 }, [user])
 
 const handleDeleteExercise = async (exercise) => {
-  try {
-    const userEmail = user.email;
-    const response = await fetch(
-      'http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/deleteExercise',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userEmail,
-          programName,
-          programData: exercise,
-        }),
-      }
-    );
+    try {
 
-
-
-    const data = await response.json();
-
-    console.log('response data: ', data); 
-    setProgramData(prevData => prevData.filter(item => item.id !== exercise.id));
-
-  } catch (error) {
-    console.log('Error deleting exercise:', error.response.data);
-  }
+      const exercises = await methods.deleteExercise(user.email, programName, exercise);
+      dispatch(actions.DELETE_EXERCISE(exercises));
+      fetchPost();
+    }
+    catch (e) {
+      console.error('Error deleting exercise: ', e);
+    }
 }
+
+
   return (
     <div className='container mt-5 bg-dark programPage'>
       <h2 className='text-light mb-2'>Program: {programName}</h2>
@@ -97,12 +74,14 @@ const handleDeleteExercise = async (exercise) => {
             <p>Sets: {exercise.sets}</p>
             <p>Reps: {exercise.reps}</p>
             <p>RPE: {exercise.rpe}</p>
+            {exercise.video &&
             <video width="100px" height="100px" controls="controls">
               <source src={exercise.video} type="video/*" />
-            </video>
+            </video>}
+
             <div className="exercise-actions">
             <span className="edit-icon">
-              <i className="fas fa-edit"></i>
+              <i onClick={() => handleOpen(exercise.id)} className="fas fa-edit"></i>
             </span>
             <span className="delete-icon mx-2">
               <i onClick={() => handleDeleteExercise(exercise)} className="fas fa-trash"></i>
@@ -112,6 +91,15 @@ const handleDeleteExercise = async (exercise) => {
         ))
       ) : (
         <p className='text-light'>No exercises found for this program.</p>
+      )}
+
+       {show && (
+        <EditExerciseModal
+          show={show}
+          handleClose={handleClose}
+          exerciseName={exerciseId}
+          programName={programName}
+        />
       )}
       
       <button

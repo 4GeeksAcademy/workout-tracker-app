@@ -1,13 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-// import { collection, setDoc, doc } from "firebase/firestore";
-// import { db } from '../index.js'
-import { Context } from "../context/Provider.jsx";
+import { Context, actions } from "../context/Provider.jsx";
+import methods from '../services/Exercise'
 
 export default function AddExerciseModal() {
   const { programName } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(Context);
+  const { user, state, dispatch } = useContext(Context);
 
   const [formData, setFormData] = useState({
     exerciseName: '',
@@ -25,38 +24,53 @@ export default function AddExerciseModal() {
     }));
   };
 
-  const handleSaveExercise = async (e) => {
-    e.preventDefault()
-    try {
-      const userEmail = user.email;
-      const response = await fetch(
-        'http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/addExercise',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userEmail,
-            programName,
-            formData
-          }),
-        }
-      );
+  // const handleSaveExercise = async (e) => {
+  //   e.preventDefault()
+  //   try {
+  //     const userEmail = user.email;
+  //     const response = await fetch(
+  //       'http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/addExercise',
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           userEmail,
+  //           programName,
+  //           formData
+  //         }),
+  //       }
+  //     );
 
   
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      console.log('response data: ', data); 
-    } catch (error) {
-      console.log('Error creating program:', error.response.data);
+  //     console.log('response data: ', data); 
+  //   } catch (error) {
+  //     console.log('Error creating program:', error.response.data);
+  //   }
+  //   finally {
+  //     navigate(`/programs/${programName}`)
+  //   }
+  // };
+
+  const handleSaveExercise = async (e) => {
+    e.preventDefault()
+    console.log('Saving Exercise');
+    try {
+
+      const exercises = await methods.createExercise(user.email, programName, formData);
+      dispatch(actions.ADD_EXERCISE(exercises));
     }
-    finally {
+    catch (e) {
+      console.error('Error creating exercise: ', e);
+    }
+    finally{
       navigate(`/programs/${programName}`)
     }
-  };
-
+  }
 
   return (
     <div className="container mt-4 bg-dark text-light">
