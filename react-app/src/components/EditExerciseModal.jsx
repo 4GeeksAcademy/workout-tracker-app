@@ -16,7 +16,7 @@ export default function EditExerciseModal({
 }) {
     const { user, state, dispatch } = useContext(Context);
     const formData = state.exercises.find((ex) => ex.id === exerciseName);
-    console.log(formData)
+    console.log('form and state:', formData, state)
     
 
 
@@ -27,6 +27,7 @@ export default function EditExerciseModal({
         // pass exercise.id
           const exercises = await methods.updateExercise(user.email, programName, formData);
           dispatch(actions.EDIT_EXERCISE(exercises));
+          
         }
         catch (e) {
           console.error('Error editing exercise: ', e);

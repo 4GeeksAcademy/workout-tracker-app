@@ -54,8 +54,39 @@ const methods = {
         
         },
 
-    async updateExercise() {
+    async updateExercise(userEmail, programName, formData) {
+      console.log("Updating Exercise on firestore...");
+        
+      try {
+          const response = await fetch(
+            'http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/updateExercise',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                userEmail,
+                programName,
+                formData
+              }),
+            }
+          );
 
+          const data = await response.json();
+          console.log('response data: ', data); 
+
+          // return data;  
+
+          const updatedExercises = await this.fetchExercises(userEmail, programName);
+          console.log('updated:', updatedExercises)
+          
+          return updatedExercises;
+
+        } catch (error) {
+          console.log('Error updating exercise:', error);
+        }
+      
     },
     async deleteExercise(userEmail, programName, exercise) {
       console.log('Deleting exercise from Firestore..');

@@ -4,7 +4,9 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { initializeApp } from "firebase/app";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
+
 import Layout from "./Layout";
 import { getAuth, GoogleAuthProvider, connectAuthEmulator } from "firebase/auth";
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -31,6 +33,9 @@ connectAuthEmulator(auth,  "http://127.0.0.1:9099");
 // firebase.firestore()?
 const db = getFirestore(app);
 connectFirestoreEmulator(db, '127.0.0.1', 5057);
+// const storage = getStorage(app);
+// connectStorageEmulator(storage, '127.0.0.1', 9199);
+
 export {auth, provider, db}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

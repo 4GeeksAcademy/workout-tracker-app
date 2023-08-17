@@ -5,6 +5,7 @@ const logger = require("firebase-functions/logger");
 const axios = require("axios");
 const cors = require("cors")({ origin: true });
 require("dotenv").config();
+const {Storage} = require('@google-cloud/storage');
 
 const admin = initializeApp({ projectId: 'fitness-log-app-c3dd9' });
 const firestore = getFirestore(admin);
@@ -134,9 +135,68 @@ exports.updateExercise = onRequest(async (req, res) => {
 
     await exercisesCollectionRef.doc(formData.exerciseName).set(formData);
 
-    return res.status(201).json({ message: 'exercise added successfully' });
+    return res.status(201).json({ message: 'exercise updated successfully' });
   } catch (error) {
     console.error('Error adding exercise:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+exports.uploadVideo = onRequest(async (req,res) => {
+const bucketName = 'fitness-log-app-c3dd9';
+
+const filePath = '.\media\light_bulb_going_on_and_off (1080p).mp4';
+
+const destFileName = 'light-bulb-uploaded-1080p-test';
+
+
+// Creates a client
+const storage = new Storage();
+
+async function uploadFile() {
+  const options = {
+    destination: destFileName,
+    // Optional:
+    // Set a generation-match precondition to avoid potential race conditions
+    // and data corruptions. The request to upload is aborted if the object's
+    // generation number does not match your precondition. For a destination
+    // object that does not yet exist, set the ifGenerationMatch precondition to 0
+    // If the destination object already exists in your bucket, set instead a
+    // generation-match precondition using its generation number.
+    preconditionOpts: {ifGenerationMatch: generationMatchPrecondition},
+  };
+
+  await storage.bucket(bucketName).upload(filePath, options);
+  console.log(`${filePath} uploaded to ${bucketName}`);
+}
+
+uploadFile().catch(console.error);
+
+  // const storageBucket = 'fitness-log-app-c3dd9'; 
+  // const { fileName, user } = req.body;
+  // const authToken = user.accessToken;
+  // const uploadUrl = `https://storage.googleapis.com/${storageBucket}/${fileName}`;
+  
+  // const headers = new Headers({
+  //   Authorization: `Bearer ${authToken}`,
+  //   'Content-Type': file.type,
+  // });
+
+  // try {
+  //   const response = await fetch(uploadUrl, {
+  //     method: 'PUT',
+  //     headers: headers,
+  //     body: file,
+  //   });
+
+  //   if (response.ok) {
+  //     console.log('File uploaded successfully.', uploadUrl);
+  //     return uploadUrl; 
+  //   } else {
+  //     console.error('Error uploading file:', response.statusText);
+  //   }
+  // } catch (error) {
+  //   console.error('Error uploading file:', error);
+  // }
+});
+  
