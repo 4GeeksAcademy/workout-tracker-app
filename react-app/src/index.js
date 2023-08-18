@@ -33,8 +33,8 @@ connectAuthEmulator(auth,  "http://127.0.0.1:9099");
 // firebase.firestore()?
 const db = getFirestore(app);
 connectFirestoreEmulator(db, '127.0.0.1', 5057);
-// const storage = getStorage(app);
-// connectStorageEmulator(storage, '127.0.0.1', 9199);
+const storage = getStorage(app);
+connectStorageEmulator(storage, '127.0.0.1', 9199);
 
 export {auth, provider, db}
 

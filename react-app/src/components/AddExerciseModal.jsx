@@ -32,7 +32,35 @@ export default function AddExerciseModal() {
       
       const exercises = await methods.createExercise(user.email, programName, formData);
       dispatch(actions.ADD_EXERCISE(exercises));
-    }
+      let headersList = {
+        Accept: "*/*",
+        "User-Agent": "Thunder Client (https://www.thunderclient.io)",
+      };
+      
+      // create the form
+      // let formdata = new FormData();
+      
+      // this is a hardcoded file path for the purpose of this
+      // example
+      // formdata.append(
+      //   "file",
+      //   "/Users/aaronksaunders/Downloads/Learn to Build Mobile Apps With Ionic Framework, VUEJS, and Capacitor (8).png"
+      // );
+      
+      // this is the url to the emulator firebase service
+      fetch("http://127.0.0.1:5001/fitness-log-app-c3dd9/us-central1/uploadFile", {
+        method: "POST",
+        body: formData.video,
+        headers: headersList,
+      })
+        .then(function (response) {
+          return response.text();
+        })
+        .then(function (data) {
+          console.log(data);
+        });
+      }
+    
     catch (e) {
       console.error('Error creating exercise: ', e);
     }

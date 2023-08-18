@@ -13,8 +13,8 @@ export default function ProgramPage() {
   const [programData, setProgramData] = useState([]);
   const navigate = useNavigate()
   const [exerciseId, setExerciseId] = useState(null)
-
-
+  
+  
 const handleOpen = (exerciseId) => {
   setExerciseId(exerciseId)
   setShow(true)
@@ -32,26 +32,20 @@ const fetchPost = async () => {
     setIsLoading(false);
     console.log('state', state);
     // console.log('exercises', exercises);
-
+    
     
   }
   catch (e) {
     console.error(e);
     setIsLoading(false);
   }
-
+  
 }
 
-useEffect(()=>{
-  if (!programData.length) {
-    fetchPost();
-
-  }
-}, [user])
 
 const handleDeleteExercise = async (exercise) => {
-    try {
-
+  try {
+    
       const exercises = await methods.deleteExercise(user.email, programName, exercise);
       dispatch(actions.DELETE_EXERCISE(exercises));
       fetchPost();
@@ -59,9 +53,16 @@ const handleDeleteExercise = async (exercise) => {
     catch (e) {
       console.error('Error deleting exercise: ', e);
     }
-}
-
-
+  }
+  
+  useEffect(()=>{
+    if (!programData.length) {
+      fetchPost();
+      console.log('useeffect change')
+  
+    }
+  }, [user])
+  
   return (
     <div className='container mt-5 bg-dark programPage'>
       <h2 className='text-light mb-2'>Program: {programName}</h2>
@@ -89,18 +90,19 @@ const handleDeleteExercise = async (exercise) => {
           </div>
           </div>
         ))
-      ) : (
-        <p className='text-light'>No exercises found for this program.</p>
-      )}
+        ) : (
+          <p className='text-light'>No exercises found for this program.</p>
+          )}
 
-       {show && (
-        <EditExerciseModal
-          show={show}
-          handleClose={handleClose}
-          exerciseName={exerciseId}
-          programName={programName}
-        />
-      )}
+          {show && (
+           <EditExerciseModal
+             show={show}
+             handleClose={handleClose}
+             exerciseName={exerciseId}
+             programName={programName}
+            //  exercise={exercise}
+           />
+         )}
       
       <button
         className="btn btn-primary mt-3"
